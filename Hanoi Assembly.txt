@@ -1,0 +1,129 @@
+00 read r1   #Disks (Number of disks to move)
+01 read r2   #FromPeg (Enter "1", "2", or "3)
+02 read r3   #ToPeg (Enter "1", "2", or "3)
+#========determine r4
+03 setn r4 6
+04 sub r4 r4 r3
+05 sub r4 r4 r2
+06 nop
+07 setn r15 100 # place in stack to start storing
+08 nop
+09 nop
+10 nop
+11 nop
+12 nop
+13 calln r14 15
+14 halt
+
+
+
+#==============If disks = 1, write frompeg and topeg
+  #addn r1 -1
+15   copy r6 r1 #Begin function
+16   addn r6 -1 
+17  jeqzn r6 93 #check disk -1 value
+# nop #addn r1 1
+
+
+#===== hanoi(disk-1, from, other)
+18 storer r1 r15  #store all values
+19 addn r15 1
+20 storer r2 r15
+21 addn r15 1
+22 storer r3 r15
+23 addn r15 1
+24 storer r4 r15
+25 addn r15 1
+26 storer r14 r15
+27 addn r15 1
+
+28 copy r7 r3 #change the new "to" value from "other"
+29 copy r3 r4
+30 copy r4 r7
+31 addn r1 -1 #change other to original "to"
+
+
+32 calln r14 15 #calls function recursively
+
+33 addn r15 -1     #Loads the values into the function
+34 loadr r14 r15
+35 addn r15 -1
+36 loadr r4 r15 
+37 addn r15 -1
+38 loadr r3 r15 
+39 addn r15 -1
+40 loadr r2 r15 
+41 addn r15 -1
+42 loadr r1 r15 
+#40 nop #addn r15 -1
+#======= end of first function
+
+#=========hanoi(1,from,to) 
+43 storer r1 r15  #stores all the values
+44 addn r15 1
+45 storer r2 r15
+46 addn r15 1
+47 storer r3 r15
+48 addn r15 1
+49 storer r4 r15
+50 addn r15 1
+51 storer r14 r15
+52 addn r15 1
+
+53 setn r1 1   #Change the # of disks to 1
+54 calln r14 15
+
+55 addn r15 -1    #Load the numbers back
+56 loadr r14 r15
+57 addn r15 -1
+58 loadr r4 r15 
+59 addn r15 -1
+60 loadr r3 r15 
+61 addn r15 -1
+62 loadr r2 r15 
+63 addn r15 -1
+64 loadr r1 r15 
+65 nop # addn r15 -1
+
+#=========
+
+
+#hanoi(disk-1,otherpeg, topeg)
+
+
+66 storer r1 r15  #Stores the original values
+67 addn r15 1
+68 storer r2 r15
+69 addn r15 1
+70 storer r3 r15
+71 addn r15 1
+72 storer r4 r15
+73 addn r15 1
+74 storer r14 r15
+75 addn r15 1
+
+76 copy r8 r2 #changes the new "from" into "other"
+77 copy r2 r4
+78 copy r4 r8
+79 addn r1 -1 #changes "other" to the "from"
+ 
+80 calln r14 15
+
+81 addn r15 -1  #loads values back into the function
+82 loadr r14 r15
+83 addn r15 -1
+84 loadr r4 r15 
+85 addn r15 -1
+86 loadr r3 r15 
+87 addn r15 -1
+88 loadr r2 r15 
+89 addn r15 -1
+90 loadr r1 r15
+91 nop #addn r15 -1
+92 jumpr r14  #Finish! Jump back
+
+
+
+93 write r2
+94 write r3
+95 jumpr r14
